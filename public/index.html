@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>검 강화 플레이봇</title>
+<style>
+body {
+  background:#111;
+  color:#fff;
+  font-family:sans-serif;
+}
+#log {
+  height:350px;
+  border:1px solid #444;
+  overflow:auto;
+  padding:10px;
+}
+input { width:75%; }
+button { width:22%; }
+</style>
+</head>
+<body>
+
+<h2 id="title"></h2>
+<div id="log"></div>
+
+<input id="cmd" placeholder="/강화  또는  /배틀 @닉네임">
+<button onclick="send()">입력</button>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+const socket = io();
+const nickname = prompt("닉네임을 입력하세요");
+
+document.getElementById("title").innerText = nickname + " 접속중";
+socket.emit("join", nickname);
+
+const logBox = document.getElementById("log");
+
+function log(msg) {
+  logBox.innerHTML += msg + "<br>";
+  logBox.scrollTop = logBox.scrollHeight;
+}
+
+socket.on("log", log);
+
+function send() {
+  const cmd = document.getElementById("cmd").value;
+  document.getElementById("cmd").value = "";
+
+  if (cmd === "/강화") {
+    socket.emit("enhance");
+  } 
+  else if (cmd.startsWith("/배틀")) {
+    const target = cmd.split("@")[1];
+    socket.emit("battle", target);
+  } 
+  else {
+    log("❓ 알 수 없는 명령어");
+  }
+}
+</script>
+
+</body>
+</html>
