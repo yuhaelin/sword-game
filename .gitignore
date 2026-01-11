@@ -1,0 +1,2 @@
+.DS_Store
+node_modules/ # node_modules도 Git에 올리지 않게
