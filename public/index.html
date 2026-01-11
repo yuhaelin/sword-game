@@ -1,65 +1,25 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<title>검 강화 플레이봇</title>
-<style>
-body {
-  background:#111;
-  color:#fff;
-  font-family:sans-serif;
-}
-#log {
-  height:350px;
-  border:1px solid #444;
-  overflow:auto;
-  padding:10px;
-}
-input { width:75%; }
-button { width:22%; }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>검 강화 게임</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div class="container">
+    <h1>⚔️ 검 강화 배틀</h1>
 
-<h2 id="title"></h2>
-<div id="log"></div>
+    <div id="chat"></div>
 
-<input id="cmd" placeholder="/강화  또는  /배틀 @닉네임">
-<button onclick="send()">입력</button>
+    <input id="input" placeholder="/강화 또는 /배틀" />
+    <div class="buttons">
+      <button onclick="sendCommand('/강화')">🔨 강화</button>
+      <button onclick="sendCommand('/배틀')">⚔️ 배틀</button>
+    </div>
+  </div>
 
-<script src="/socket.io/socket.io.js"></script>
-<script>
-const socket = io();
-const nickname = prompt("닉네임을 입력하세요");
-
-document.getElementById("title").innerText = nickname + " 접속중";
-socket.emit("join", nickname);
-
-const logBox = document.getElementById("log");
-
-function log(msg) {
-  logBox.innerHTML += msg + "<br>";
-  logBox.scrollTop = logBox.scrollHeight;
-}
-
-socket.on("log", log);
-
-function send() {
-  const cmd = document.getElementById("cmd").value;
-  document.getElementById("cmd").value = "";
-
-  if (cmd === "/강화") {
-    socket.emit("enhance");
-  } 
-  else if (cmd.startsWith("/배틀")) {
-    const target = cmd.split("@")[1];
-    socket.emit("battle", target);
-  } 
-  else {
-    log("❓ 알 수 없는 명령어");
-  }
-}
-</script>
-
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
